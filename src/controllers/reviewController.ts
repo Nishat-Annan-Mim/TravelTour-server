@@ -52,12 +52,10 @@ export const createReview = async (
     const { tourId, rating, comment } = req.body;
 
     if (!tourId || !rating || !comment) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          message: "Please provide tour, rating, and comment",
-        });
+      res.status(400).json({
+        success: false,
+        message: "Please provide tour, rating, and comment",
+      });
       return;
     }
 
@@ -120,12 +118,10 @@ export const deleteReview = async (
     const isAdmin = req.user.role === "admin";
 
     if (!isOwner && !isAdmin) {
-      res
-        .status(403)
-        .json({
-          success: false,
-          message: "Not authorized to delete this review",
-        });
+      res.status(403).json({
+        success: false,
+        message: "Not authorized to delete this review",
+      });
       return;
     }
 
