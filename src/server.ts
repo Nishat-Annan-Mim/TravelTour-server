@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import tourRoutes from "./routes/tourRoutes";
+import bookingRoutes from "./routes/bookingRoutes";
+import reviewRoutes from "./routes/reviewRoutes";
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use(cookieParser());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/tours", tourRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
