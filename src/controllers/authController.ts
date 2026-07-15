@@ -10,18 +10,33 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      res.status(400).json({ success: false, message: "Please provide name, email, and password" });
+      res
+        .status(400)
+        .json({
+          success: false,
+          message: "Please provide name, email, and password",
+        });
       return;
     }
 
     if (password.length < 6) {
-      res.status(400).json({ success: false, message: "Password must be at least 6 characters" });
+      res
+        .status(400)
+        .json({
+          success: false,
+          message: "Password must be at least 6 characters",
+        });
       return;
     }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
-      res.status(400).json({ success: false, message: "User with this email already exists" });
+      res
+        .status(400)
+        .json({
+          success: false,
+          message: "User with this email already exists",
+        });
       return;
     }
 
@@ -47,7 +62,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     console.error("Register error:", error);
-    res.status(500).json({ success: false, message: "Server error during registration" });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error during registration" });
   }
 };
 
@@ -58,20 +75,28 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(400).json({ success: false, message: "Please provide email and password" });
+      res
+        .status(400)
+        .json({ success: false, message: "Please provide email and password" });
       return;
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
+    const user = await User.findOne({ email: email.toLowerCase() }).select(
+      "+password",
+    );
 
     if (!user || !user.password) {
-      res.status(401).json({ success: false, message: "Invalid email or password" });
+      res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password" });
       return;
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      res.status(401).json({ success: false, message: "Invalid email or password" });
+      res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password" });
       return;
     }
 
@@ -90,18 +115,25 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ success: false, message: "Server error during login" });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error during login" });
   }
 };
 
 // @desc    Google OAuth login/register
 // @route   POST /api/auth/google
-export const googleAuth = async (req: Request, res: Response): Promise<void> => {
+export const googleAuth = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { name, email, image } = req.body;
 
     if (!name || !email) {
-      res.status(400).json({ success: false, message: "Missing Google account details" });
+      res
+        .status(400)
+        .json({ success: false, message: "Missing Google account details" });
       return;
     }
 
@@ -132,7 +164,12 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
     });
   } catch (error) {
     console.error("Google auth error:", error);
-    res.status(500).json({ success: false, message: "Server error during Google authentication" });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Server error during Google authentication",
+      });
   }
 };
 
