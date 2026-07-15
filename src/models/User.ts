@@ -53,12 +53,17 @@ const UserSchema = new Schema<IUser>(
 );
 
 // Hash password before saving
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password") || !this.password) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+UserSchema.pre(
+  "save",
+  async function (
+    this: mongoose.Document & IUser,
+    options: mongoose.SaveOptions,
+  ) {
+    if (!this.isModified("password") || !this.password) return;
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  },
+);
 
 // Compare password method
 UserSchema.methods.comparePassword = async function (
